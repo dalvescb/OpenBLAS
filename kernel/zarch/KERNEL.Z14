@@ -1,0 +1,251 @@
+ifneq ($(OSNAME),zOS)
+SAMAXKERNEL  = samax.c
+DAMAXKERNEL  = damax.c
+CAMAXKERNEL  = camax.c
+ZAMAXKERNEL  = zamax.c
+
+SAMINKERNEL  = samin.c
+DAMINKERNEL  = damin.c
+CAMINKERNEL  = camin.c
+ZAMINKERNEL  = zamin.c
+
+SMAXKERNEL   = smax.c
+DMAXKERNEL   = dmax.c
+
+SMINKERNEL   = smin.c
+DMINKERNEL   = dmin.c
+
+ISAMAXKERNEL = isamax.c
+IDAMAXKERNEL = idamax.c
+ICAMAXKERNEL = icamax.c
+IZAMAXKERNEL = izamax.c
+
+ISAMINKERNEL = isamin.c
+IDAMINKERNEL = idamin.c
+ICAMINKERNEL = icamin.c
+IZAMINKERNEL = izamin.c
+
+ISMAXKERNEL  = ismax.c
+IDMAXKERNEL  = idmax.c
+
+ISMINKERNEL  = ismin.c
+IDMINKERNEL  = idmin.c
+
+SASUMKERNEL  = sasum.c
+DASUMKERNEL  = dasum.c
+CASUMKERNEL  = casum.c
+ZASUMKERNEL  = zasum.c
+
+SSUMKERNEL  = ssum.c
+DSUMKERNEL  = dsum.c
+CSUMKERNEL  = csum.c
+ZSUMKERNEL  = zsum.c
+
+SAXPYKERNEL  = saxpy.c
+DAXPYKERNEL  = daxpy.c
+CAXPYKERNEL  = caxpy.c
+ZAXPYKERNEL  = zaxpy.c
+
+SCOPYKERNEL  = scopy.c
+DCOPYKERNEL  = dcopy.c
+CCOPYKERNEL  = ccopy.c
+ZCOPYKERNEL  = zcopy.c
+
+SDOTKERNEL   = sdot.c
+DDOTKERNEL   = ddot.c
+CDOTKERNEL   = cdot.c
+ZDOTKERNEL   = zdot.c
+DSDOTKERNEL  = dsdot.c
+
+else
+
+SAMAXKERNEL  = samax_hlasm.c
+DAMAXKERNEL  = damax_hlasm.c
+CAMAXKERNEL  = camax_hlasm.c
+ZAMAXKERNEL  = zamax_hlasm.c
+
+SAMINKERNEL  = samin_hlasm.c
+DAMINKERNEL  = damin_hlasm.c
+CAMINKERNEL  = camin_hlasm.c
+ZAMINKERNEL  = zamin_hlasm.c
+
+SMAXKERNEL   = smax_hlasm.c
+DMAXKERNEL   = dmax_hlasm.c
+
+SMINKERNEL   = smin_hlasm.c
+DMINKERNEL   = dmin_hlasm.c
+
+ISAMAXKERNEL = isamax_hlasm.c
+IDAMAXKERNEL = idamax_hlasm.c
+ICAMAXKERNEL = icamax_hlasm.c
+IZAMAXKERNEL = izamax_hlasm.c
+
+ISAMINKERNEL = isamin_hlasm.c
+IDAMINKERNEL = idamin_hlasm.c
+ICAMINKERNEL = icamin_hlasm.c
+IZAMINKERNEL = izamin_hlasm.c
+
+ISMAXKERNEL  = ismax_hlasm.c
+IDMAXKERNEL  = idmax_hlasm.c
+
+ISMINKERNEL  = ismin_hlasm.c
+IDMINKERNEL  = idmin_hlasm.c
+
+SASUMKERNEL  = sasum_hlasm.c
+DASUMKERNEL  = dasum_hlasm.c
+CASUMKERNEL  = casum_hlasm.c
+ZASUMKERNEL  = zasum_hlasm.c
+
+SSUMKERNEL  = ssum_hlasm.c
+DSUMKERNEL  = dsum_hlasm.c
+CSUMKERNEL  = csum_hlasm.c
+ZSUMKERNEL  = zsum_hlasm.c
+
+SAXPYKERNEL  = saxpy_hlasm.c
+DAXPYKERNEL  = daxpy_hlasm.c
+CAXPYKERNEL  = caxpy_hlasm.c
+ZAXPYKERNEL  = zaxpy_hlasm.c
+
+SCOPYKERNEL  = scopy_hlasm.c
+DCOPYKERNEL  = dcopy_hlasm.c
+CCOPYKERNEL  = ccopy_hlasm.c
+ZCOPYKERNEL  = zcopy_hlasm.c
+
+SDOTKERNEL   = sdot_hlasm.c
+DDOTKERNEL   = ddot_hlasm.c
+CDOTKERNEL   = cdot_hlasm.c
+ZDOTKERNEL   = zdot_hlasm.c
+DSDOTKERNEL  = dsdot_hlasm.c
+endif
+
+SNRM2KERNEL  = ../arm/nrm2.c
+DNRM2KERNEL  = ../arm/nrm2.c
+CNRM2KERNEL  = ../arm/znrm2.c
+ZNRM2KERNEL  = ../arm/znrm2.c
+
+ifneq ($(OSNAME),zOS)
+SROTKERNEL   = srot.c
+DROTKERNEL   = drot.c
+CROTKERNEL   = crot.c
+ZROTKERNEL   = zrot.c
+
+SSCALKERNEL  = sscal.c
+DSCALKERNEL  = dscal.c
+CSCALKERNEL  = cscal.c
+ZSCALKERNEL  = zscal.c
+
+SSWAPKERNEL  = sswap.c
+DSWAPKERNEL  = dswap.c
+CSWAPKERNEL  = cswap.c
+ZSWAPKERNEL  = zswap.c
+
+SGEMVNKERNEL = sgemv_n_4.c
+DGEMVNKERNEL = dgemv_n_4.c
+CGEMVNKERNEL = cgemv_n_4.c
+ZGEMVNKERNEL = zgemv_n_4.c
+
+SGEMVTKERNEL = sgemv_t_4.c
+DGEMVTKERNEL = dgemv_t_4.c
+CGEMVTKERNEL = cgemv_t_4.c
+ZGEMVTKERNEL = zgemv_t_4.c
+
+else
+
+SROTKERNEL   = srot_hlasm.c
+DROTKERNEL   = drot_hlasm.c
+CROTKERNEL   = crot_hlasm.c
+ZROTKERNEL   = zrot_hlasm.c
+
+SSCALKERNEL  = sscal_hlasm.c
+DSCALKERNEL  = dscal_hlasm.c
+CSCALKERNEL  = cscal_hlasm.c
+ZSCALKERNEL  = zscal_hlasm.c
+
+SSWAPKERNEL  = sswap_hlasm.c
+DSWAPKERNEL  = dswap_hlasm.c
+CSWAPKERNEL  = cswap_hlasm.c
+ZSWAPKERNEL  = zswap_hlasm.c
+
+SGEMVNKERNEL = sgemv_n_4_hlasm.c
+DGEMVNKERNEL = dgemv_n_4_hlasm.c
+CGEMVNKERNEL = cgemv_n_4_hlasm.c
+ZGEMVNKERNEL = zgemv_n_4_hlasm.c
+
+SGEMVTKERNEL = sgemv_t_4_hlasm.c
+DGEMVTKERNEL = dgemv_t_4_hlasm.c
+CGEMVTKERNEL = cgemv_t_4_hlasm.c
+ZGEMVTKERNEL = zgemv_t_4_hlasm.c
+endif
+
+STRMMKERNEL	= gemm_vec.c
+DTRMMKERNEL	= gemm_vec.c
+ifneq ($(OSNAME),Linux)
+CTRMMKERNEL     = ../generic/ztrmmkernel_2x2.c
+ZTRMMKERNEL     = ../generic/ztrmmkernel_2x2.c
+else
+CTRMMKERNEL	= ctrmm4x4V.S
+ZTRMMKERNEL	= ztrmm4x4V.S
+endif
+
+SGEMMKERNEL    = gemm_vec.c
+ifneq ($(SGEMM_UNROLL_M),$(SGEMM_UNROLL_N))
+SGEMMINCOPY    = ../generic/gemm_ncopy_$(SGEMM_UNROLL_M).c
+SGEMMITCOPY    = ../generic/gemm_tcopy_$(SGEMM_UNROLL_M).c
+SGEMMINCOPYOBJ = sgemm_incopy$(TSUFFIX).$(SUFFIX)
+SGEMMITCOPYOBJ = sgemm_itcopy$(TSUFFIX).$(SUFFIX)
+endif
+SGEMMONCOPY    = ../generic/gemm_ncopy_$(SGEMM_UNROLL_N).c
+SGEMMOTCOPY    = ../generic/gemm_tcopy_$(SGEMM_UNROLL_N).c
+SGEMMONCOPYOBJ = sgemm_oncopy$(TSUFFIX).$(SUFFIX)
+SGEMMOTCOPYOBJ = sgemm_otcopy$(TSUFFIX).$(SUFFIX)
+
+DGEMMKERNEL    = gemm_vec.c
+DGEMMINCOPY    = ../generic/gemm_ncopy_8.c
+DGEMMITCOPY    = ../generic/gemm_tcopy_8.c
+DGEMMONCOPY    = ../generic/gemm_ncopy_4.c
+DGEMMOTCOPY    = ../generic/gemm_tcopy_4.c
+DGEMMINCOPYOBJ = dgemm_incopy$(TSUFFIX).$(SUFFIX)
+DGEMMITCOPYOBJ = dgemm_itcopy$(TSUFFIX).$(SUFFIX)
+DGEMMONCOPYOBJ = dgemm_oncopy$(TSUFFIX).$(SUFFIX)
+DGEMMOTCOPYOBJ = dgemm_otcopy$(TSUFFIX).$(SUFFIX)
+
+ifneq ($(OSNAME),Linux)
+CGEMMKERNEL    = ../generic/zgemmkernel_2x2.c
+else
+CGEMMKERNEL    = ctrmm4x4V.S
+endif
+CGEMMONCOPY    = ../generic/zgemm_ncopy_4.c
+CGEMMOTCOPY    = ../generic/zgemm_tcopy_4.c
+CGEMMONCOPYOBJ =  cgemm_oncopy$(TSUFFIX).$(SUFFIX)
+CGEMMOTCOPYOBJ =  cgemm_otcopy$(TSUFFIX).$(SUFFIX)
+
+ifneq ($(OSNAME),Linux)
+ZGEMMKERNEL    = ../generic/zgemmkernel_2x2.c
+else
+ZGEMMKERNEL    = ztrmm4x4V.S
+endif
+ZGEMMONCOPY    = ../generic/zgemm_ncopy_4.c
+ZGEMMOTCOPY    = ../generic/zgemm_tcopy_4.c
+ZGEMMONCOPYOBJ =  zgemm_oncopy$(TSUFFIX).$(SUFFIX)
+ZGEMMOTCOPYOBJ =  zgemm_otcopy$(TSUFFIX).$(SUFFIX)
+
+STRSMKERNEL_LN	=  ../generic/trsm_kernel_LN.c
+STRSMKERNEL_LT	=  ../generic/trsm_kernel_LT.c
+STRSMKERNEL_RN	=  ../generic/trsm_kernel_RN.c
+STRSMKERNEL_RT	=  ../generic/trsm_kernel_RT.c
+
+DTRSMKERNEL_LN	= ../generic/trsm_kernel_LN.c
+DTRSMKERNEL_LT	= ../generic/trsm_kernel_LT.c
+DTRSMKERNEL_RN	= ../generic/trsm_kernel_RN.c
+DTRSMKERNEL_RT	= ../generic/trsm_kernel_RT.c
+
+CTRSMKERNEL_LN	= ../generic/trsm_kernel_LN.c
+CTRSMKERNEL_LT	= ../generic/trsm_kernel_LT.c
+CTRSMKERNEL_RN	= ../generic/trsm_kernel_RN.c
+CTRSMKERNEL_RT	= ../generic/trsm_kernel_RT.c
+
+ZTRSMKERNEL_LN	= ../generic/trsm_kernel_LN.c
+ZTRSMKERNEL_LT	= ../generic/trsm_kernel_LT.c
+ZTRSMKERNEL_RN	= ../generic/trsm_kernel_RN.c
+ZTRSMKERNEL_RT	= ../generic/trsm_kernel_RT.c
+
