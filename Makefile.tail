@@ -43,6 +43,10 @@ $(XBLASOBJS_P) : override CFLAGS += -DPROFILE $(COMMON_PROF)
 $(SBEXTOBJS_P) : override CFLAGS += -DPROFILE $(COMMON_PROF)
 
 libs    :: $(BLASOBJS) $(COMMONOBJS)
+ifeq ($(OSNAME), zOS)
+	@echo $(CURDIR) >> $(TOPDIR)/exports/objlist_tmp
+	@echo "$^" >> $(TOPDIR)/exports/objlist_tmp
+endif
 	$(AR) $(ARFLAGS) -ru $(TOPDIR)/$(LIBNAME) $^
 
 prof    :: $(BLASOBJS_P) $(COMMONOBJS_P)

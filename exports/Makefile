@@ -106,6 +106,12 @@ dyn : $(LIBDYNNAME)
 zip : dll
 	zip $(LIBZIPNAME) $(LIBDLLNAME) $(LIBNAME)
 
+dll.zOS :
+	@./create_objlist.py > objlist
+	@rm -f objlist_tmp
+	$(CC) $(CFLAGS) -Wl,-fobjlist -Wl,-x../$(LIBNAME).x -o ../$(LIBDLLNAME)
+	@rm -f objlist
+
 dll  : ../$(LIBDLLNAME)
 
 # On Windows, we only generate a DLL without a version suffix.  This is because

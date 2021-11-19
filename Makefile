@@ -126,6 +126,9 @@ ifeq ($(OSNAME), Darwin)
 	@ln -fs $(LIBDYNNAME) $(LIBPREFIX).dylib
 	@ln -fs $(LIBDYNNAME) $(LIBPREFIX).$(MAJOR_VERSION).dylib
 endif
+ifeq ($(OSNAME), zOS)
+	@$(MAKE) -C exports dll.zOS
+endif
 ifeq ($(OSNAME), WINNT)
 	@$(MAKE) -C exports dll
 endif
@@ -160,6 +163,9 @@ ifeq ($(NO_STATIC), 1)
 ifeq ($(NO_SHARED), 1)
 	$(error OpenBLAS: neither static nor shared are enabled.)
 endif
+endif
+ifeq ($(OSNAME), zOS)
+	@rm -f exports/objlist exports/objlist_tmp
 endif
 	@-ln -fs $(LIBNAME) $(LIBPREFIX).$(LIBSUFFIX)
 	@for d in $(SUBDIRS) ; \

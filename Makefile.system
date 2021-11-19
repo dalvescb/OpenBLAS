@@ -40,7 +40,6 @@ OS := $(shell uname -s | sed -e s/\-.*//)
 ifeq ($(OS), OS/390)
 CC := clang
 USE_THREAD = 0
-NO_SHARED = 1
 ifndef TARGET
 ZCPU := $(shell uname -m | sed -e s/\-.*//)
 ifeq ($(ZCPU), $(filter $(ZCPU),3906 3907))
