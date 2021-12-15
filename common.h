@@ -516,7 +516,7 @@ static void __inline blas_lock(volatile BLASULONG *address){
 #ifndef RPCC_DEFINED
 #error "rpcc() implementation is missing for your platform"
 #endif
-#ifndef BLAS_LOCK_DEFINED
+#if !defined(BLAS_LOCK_DEFINED) && !defined(OS_ZOS)
 #error "blas_lock() implementation is missing for your platform"
 #endif
 #endif // !ASSEMBLER
