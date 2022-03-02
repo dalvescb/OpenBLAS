@@ -40,6 +40,7 @@ SUBDIRS_ALL = $(SUBDIRS) test ctest utest exports benchmark ../laswp ../bench cp
 .NOTPARALLEL : all libs $(RELA) prof lapack-test install blas-test
 
 all :: libs netlib $(RELA) tests shared
+	@rm -f exports/objlist_tmp
 	@echo
 	@echo " OpenBLAS build complete. ($(LIB_COMPONENTS))"
 	@echo
