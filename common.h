@@ -487,6 +487,19 @@ typedef char* env_var_t;
 #endif
 #endif
 /* use similar scale as x86 rdtsc for timeouts to work correctly */
+#if defined(OS_ZOS) && !defined(BUILD_OPENBLAS)
+static inline unsigned long long rpcc(void){
+#ifdef USE_MONOTONIC
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return (unsigned long long)ts.tv_sec * (unsigned long long)1000000000 + ts.tv_nsec;
+#else
+  struct timeval tv;
+  gettimeofday(&tv,NULL);
+  return (unsigned long long)tv.tv_sec * (unsigned long long)1000000000 + tv.tv_usec * 1000;
+#endif
+}
+#else
 static inline unsigned long long rpcc(void){
 #ifdef USE_MONOTONIC
   struct timespec ts;
@@ -498,6 +511,7 @@ static inline unsigned long long rpcc(void){
   return (unsigned long long)tv.tv_sec * 1000000000ull + tv.tv_usec * 1000;
 #endif
 }
+#endif
 #define RPCC_DEFINED
 #define RPCC64BIT
 #endif // !RPCC_DEFINED
