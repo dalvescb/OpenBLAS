@@ -39,7 +39,9 @@ endif
 OS := $(shell uname -s | sed -e s/\-.*//)
 ifeq ($(OS), OS/390)
 CC := /nfsmnts/wozdrivers/continuous.dev/s390x/zOS/wozdev/1626/bin/clang
-NO_SHARED=1
+ifndef NO_SHARED
+VISIBILITY=-fvisibility=default
+endif
 USE_THREAD = 0
 ifndef TARGET
 ZCPU := $(shell uname -m | sed -e s/\-.*//)
@@ -1419,8 +1421,7 @@ endif
 
 ifndef COMMON_OPT
 ifeq ($(OSNAME), zOS)
-COMMON_OPT = -O2 -D_XOPEN_SOURCE_EXTENDED=1 -D_UNIX03_THREADS=1 -DMAP_ANON=32 -DzOS=1 -DBUILD_OPENBLAS=1 
-#-fvisibility=default
+COMMON_OPT = -O2 -D_XOPEN_SOURCE_EXTENDED=1 -D_UNIX03_THREADS=1 -DMAP_ANON=32 -DzOS=1 -DBUILD_OPENBLAS=1 $(VISIBILITY)
 else
 COMMON_OPT = -O2
 endif
