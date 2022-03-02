@@ -1,0 +1,32 @@
+set -x 
+mkdir -p lib_static lib_dynamic	
+rm -f lib_static/libopenblas* lib_dynamic/libopenblas*
+
+############ dynamic library ############
+make clean
+make
+
+rm -f libopenblas*.a
+mv libopenblas.dll libopenblas_z14-r0.3.13.dev_zOS_64xp.dll
+mv libopenblas_z14-r0.3.13.dev.a.x libopenblas_z14-r0.3.13.dev_zOS_64xp.x
+mv libopenblas* lib_dynamic
+cd lib_dynamic
+ln -s libopenblas_z14-r0.3.13.dev_zOS_64xp.dll libopenblas.dll
+ln -s libopenblas_z14-r0.3.13.dev_zOS_64xp.x libopenblas.x
+cd ..
+########################################
+
+#
+
+############ static library ############
+make clean
+make NO_SHARED=1
+
+rm -f libopenblas.a
+mv libopenblas_z14-r0.3.13.dev.a libopenblas_z14-r0.3.13.dev_zOS_64xp.a
+mv libopenblas* lib_static
+cd lib_static
+ln -s libopenblas_z14-r0.3.13.dev_zOS_64xp.a libopenblas.a
+cd ..
+########################################
+
