@@ -38,7 +38,7 @@ endif
 # For zOS build
 OS := $(shell uname -s | sed -e s/\-.*//)
 ifeq ($(OS), OS/390)
-CC := /nfsmnts/wozdrivers/continuous.dev/s390x/zOS/wozdev/1626/bin/clang
+CC := /nfsmnts/wozdrivers/continuous/openxlC/zOS/woz/1439/bin/clang
 ifndef NO_SHARED
 VISIBILITY=-fvisibility=default
 endif
