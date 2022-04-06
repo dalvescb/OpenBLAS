@@ -1,0 +1,49 @@
+#!/bin/sh
+set -x
+######################################################
+# To build .pax package to be uploaded to BPI:
+#
+# cd git/OpenBLAS_zOS
+# buildlibs
+# make.package
+######################################################
+
+# >>>WARNING<<<
+# If $DLL_MEMBER is changed, the corresponding change must also be made
+# in make.package.sed.  The number of padding blanks must also be changed
+# if the number of characters in $DLL_MEMBER is changed.
+
+DLL_DSNAME=SCEERUN2  # DLL dataset name
+DLL_MEMBER=CRTEQOBL  # DLL member name (see warning above!)
+SD_DSNAME=SCEELIB    # side deck dataset name
+SD_MEMBER=CRTDQOBL   # side deck member name
+
+# Include files to ship (omitted ones needed only for build)
+INC_FILES="cblas.h common_level3.h common_thread.h common.h common_macro.h common_x.h common_c.h common_param.h common_z.h common_d.h common_q.h common_zarch.h common_interface.h common_reference.h config.h common_lapack.h common_s.h param.h common_level1.h common_sb.h common_level2.h common_stackalloc.h"
+
+# Make package directory and subdirs
+rm -rf package
+mkdir package
+mkdir package/USS package/USS/lib package/USS/include
+mkdir package/$DLL_DSNAME package/$SD_DSNAME
+
+# Copy USS files to package
+cp -p lib_dynamic/libopenblas.dll package/USS/lib/
+cp -p lib_dynamic/libopenblas.x   package/USS/lib/
+cp -p $INC_FILES package/USS/include/
+
+# Edit USS side deck to replace USS DLL name libopenblas.x with
+# dataset member $DLL_MEMBER while retaining 80 character records.
+sed -f make.package.sed < lib_dynamic/libopenblas.x > libopenblas.x.sed
+iconv -fISO8859-1 -tIBM-1047 libopenblas.x.sed > libopenblas.x.sed.ebcdic
+chtag -tc IBM-1047 libopenblas.x.sed.ebcdic
+
+# Copy DLL and side deck for dataset to package
+cp -p lib_dynamic/libopenblas.dll package/$DLL_DSNAME/$DLL_MEMBER
+cp -p libopenblas.x.sed.ebcdic    package/$SD_DSNAME/$SD_MEMBER
+#rm libopenblas.x.sed
+#rm libopenblas.x.sed.ebcdic
+
+# Create .pax archive
+cd package
+pax -x pax -wvf ../zOS_OpenBLAS_Mar2022_package.pax .
