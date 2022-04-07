@@ -41,8 +41,8 @@ chtag -tc IBM-1047 libopenblas.x.sed.ebcdic
 # Copy DLL and side deck for dataset to package
 cp -p lib_dynamic/libopenblas.dll package/$DLL_DSNAME/$DLL_MEMBER
 cp -p libopenblas.x.sed.ebcdic    package/$SD_DSNAME/$SD_MEMBER
-#rm libopenblas.x.sed
-#rm libopenblas.x.sed.ebcdic
+rm libopenblas.x.sed
+rm libopenblas.x.sed.ebcdic
 
 # Create .pax archive
 cd package

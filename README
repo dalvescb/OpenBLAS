@@ -1,0 +1,11 @@
+How to build release package for BPI:
+
+git clone git@github.ibm.com:Masoud-Ataei-Jaliseh/OpenBLAS_zOS.git
+cd OpenBLAS_zOS
+git checkout Mar2022release
+buildlibs
+make.package
+
+This produces:
+  package/
+  zOS_OpenBLAS_Mar2022_package.pax
