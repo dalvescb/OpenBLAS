@@ -1,12 +1,15 @@
 #!/bin/sh
 set -x
-######################################################
+###############################################################################
 # To build .pax package to be uploaded to BPI:
 #
 # cd git/OpenBLAS_zOS
 # buildlibs
 # make.package
-######################################################
+#
+# Since it is meant to be used in an EBCDIC environment with auto-conversion
+# off, convert any ASCII files to EBCDIC and remove all tags.
+###############################################################################
 
 # >>>WARNING<<<
 # If $DLL_MEMBER is changed, the corresponding change must also be made
@@ -21,6 +24,20 @@ SD_MEMBER=CRTDQOBL   # side deck member name
 # Include files to ship (omitted ones needed only for build)
 INC_FILES="cblas.h common_level3.h common_thread.h common.h common_macro.h common_x.h common_c.h common_param.h common_z.h common_d.h common_q.h common_zarch.h common_interface.h common_reference.h config.h common_lapack.h common_s.h param.h common_level1.h common_sb.h common_level2.h common_stackalloc.h"
 
+# Function returns 0 if argument file is tagged ASCII, 1 if EBCDIC.
+is_ascii(){
+  if ls -T $1 | fgrep ISO8859-1 > /dev/null
+  then
+    return 0  # if is_ascii will be taken
+  fi
+  if ls -T $1 | fgrep IBM-1047 > /dev/null
+  then
+    return 1  # if is_ascii will not be taken
+  fi
+  echo "is_ascii: ERROR: unknown tag"
+  exit
+} 
+
 # Make package directory and subdirs
 rm -rf package
 mkdir package
@@ -32,18 +49,35 @@ cp -p lib_dynamic/libopenblas.dll package/USS/lib/
 cp -p lib_dynamic/libopenblas.x   package/USS/lib/
 cp -p $INC_FILES package/USS/include/
 
+# Convert any ASCII include files to EBCDIC
+cd package/USS/include
+for f in `ls`
+do
+  if is_ascii $f
+  then
+    iconv -fISO8859-1 -tIBM-1047 $f > foo
+    mv foo $f
+    chtag -tc IBM-1047 $f
+  fi
+done
+cd ../../..
+
 # Edit USS side deck to replace USS DLL name libopenblas.x with
 # dataset member $DLL_MEMBER while retaining 80 character records.
 sed -f make.package.sed < lib_dynamic/libopenblas.x > libopenblas.x.sed
-iconv -fISO8859-1 -tIBM-1047 libopenblas.x.sed > libopenblas.x.sed.ebcdic
-chtag -tc IBM-1047 libopenblas.x.sed.ebcdic
+
+# Not needed since libopenblas.x is already EBCDIC
+#iconv -fISO8859-1 -tIBM-1047 libopenblas.x.sed > libopenblas.x.sed.ebcdic
+#chtag -tc IBM-1047 libopenblas.x.sed.ebcdic
 
 # Copy DLL and side deck for dataset to package
 cp -p lib_dynamic/libopenblas.dll package/$DLL_DSNAME/$DLL_MEMBER
-cp -p libopenblas.x.sed.ebcdic    package/$SD_DSNAME/$SD_MEMBER
+cp -p libopenblas.x.sed           package/$SD_DSNAME/$SD_MEMBER
 rm libopenblas.x.sed
-rm libopenblas.x.sed.ebcdic
+
+# Untag everything
+chtag -Rr package
 
 # Create .pax archive
 cd package
-pax -x pax -wvf ../zOS_OpenBLAS_Mar2022_package.pax .
+pax -x pax -wzvf ../zOS_OpenBLAS_Mar2022_package.pax.Z .
