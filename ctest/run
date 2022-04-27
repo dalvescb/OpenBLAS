@@ -1,0 +1,15 @@
+set -x
+./xccblat1
+./xdcblat1
+./xscblat1
+./xzcblat1
+
+./xccblat2 < cin2
+./xdcblat2 < din2 
+./xscblat2 < sin2
+./xzcblat2 < zin2
+
+#./xccblat3 < cin3
+./xdcblat3 < din3
+./xscblat3 < sin3
+#./xzcblat3 < zin3
