@@ -9,6 +9,10 @@ extern "C" {
 /* Assume C declarations for C++ */
 #endif /* __cplusplus */
 
+#ifdef ZARCH
+  #include "cblas_zarch.h"
+#endif
+
 /*Set the number of threads on runtime.*/
 void openblas_set_num_threads(int num_threads);
 void goto_set_num_threads(int num_threads);

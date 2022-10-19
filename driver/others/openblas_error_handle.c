@@ -39,6 +39,6 @@ void openblas_warning(int verbose, const char * msg) {
   int current_verbose;
   current_verbose=openblas_verbose();
   if(current_verbose >= verbose){
-    fprintf(stderr, "%s", msg);
+    FPRINTF(stderr, "%s", msg);
   }
 }

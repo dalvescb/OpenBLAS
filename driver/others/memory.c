@@ -121,7 +121,8 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MEM_LARGE_PAGES  0x20000000
 #endif
 #else
-#define ALLOC_MMAP
+// Force malloc() since mmap() not available in Authorized LE mode.
+//#define ALLOC_MMAP
 #define ALLOC_MALLOC
 #endif
 
@@ -380,7 +381,7 @@ void set_stack_limit(int limitMB){
       rl.rlim_cur=StackSize;
       result=setrlimit(RLIMIT_STACK, &rl);
       if(result !=0){
-        fprintf(stderr, "OpenBLAS: set stack limit error =%d\n", result);
+        FPRINTF(stderr, "OpenBLAS: set stack limit error =%d\n", result);
       }
     }
   }
@@ -467,7 +468,7 @@ int blas_get_cpu_number(void){
   if (blas_num_threads > MAX_CPU_NUMBER) blas_num_threads = MAX_CPU_NUMBER;
 
 #ifdef DEBUG
-  printf( "Adjusted number of threads : %3d\n", blas_num_threads);
+  PRINTF( "Adjusted number of threads : %3d\n", blas_num_threads);
 #endif
 
   blas_cpu_number = blas_num_threads;
@@ -615,7 +616,7 @@ UNLOCK_COMMAND(&key_lock);
 static void alloc_mmap_free(struct alloc_t *alloc_info){
 
   if (munmap(alloc_info, allocation_block_size)) {
-    printf("OpenBLAS : munmap failed\n");
+    PRINTF("OpenBLAS : munmap failed\n");
   }
 }
 
@@ -721,8 +722,8 @@ static void *alloc_mmap(void *address){
         ret=my_mbind(map_address, allocation_block_size * SCALING, MPOL_PREFERRED, NULL, 0, 0);
         if(ret==-1){
                 int errsv=errno;
-                perror("OpenBLAS alloc_mmap:");
-                printf("error code=%d,\tmap_address=%lx\n",errsv,map_address);
+                PERROR("OpenBLAS alloc_mmap:");
+                PRINTF("error code=%d,\tmap_address=%lx\n",errsv,map_address);
         }
 
 #else
@@ -876,11 +877,11 @@ static void alloc_devicedirver_free(struct alloc_t *alloc_info){
 
   int attr = alloc_info -> attr;
   if (munmap(address, allocation_block_size)) {
-    printf("OpenBLAS : Bugphysarea unmap failed.\n");
+    PRINTF("OpenBLAS : Bugphysarea unmap failed.\n");
   }
 
   if (close(attr)) {
-    printf("OpenBLAS : Bugphysarea close failed.\n");
+    PRINTF("OpenBLAS : Bugphysarea close failed.\n");
   }
 
 }
@@ -913,7 +914,7 @@ static void *alloc_devicedirver(void *address){
 static void alloc_shm_free(struct alloc_t *alloc_info){
 
   if (shmdt(alloc_info)) {
-    printf("OpenBLAS : Shared memory unmap failed.\n");
+    PRINTF("OpenBLAS : Shared memory unmap failed.\n");
     }
 }
 
@@ -947,7 +948,7 @@ static void alloc_hugetlb_free(struct alloc_t *alloc_info){
 
 #if defined(OS_LINUX) || defined(OS_AIX)
   if (shmdt(alloc_info)) {
-    printf("OpenBLAS : Hugepage unmap failed.\n");
+    PRINTF("OpenBLAS : Hugepage unmap failed.\n");
   }
 #endif
 
@@ -1053,11 +1054,11 @@ static void alloc_hugetlbfile_free(struct alloc_t *alloc_info){
 
   int attr = alloc_info -> attr;
   if (munmap(alloc_info, allocation_block_size)) {
-    printf("OpenBLAS : HugeTLBfs unmap failed.\n");
+    PRINTF("OpenBLAS : HugeTLBfs unmap failed.\n");
   }
 
   if (close(attr)) {
-    printf("OpenBLAS : HugeTLBfs close failed.\n");
+    PRINTF("OpenBLAS : HugeTLBfs close failed.\n");
   }
 }
 
@@ -1069,7 +1070,7 @@ static void *alloc_hugetlbfile(void *address){
 
   if (!hugetlb_pid) hugetlb_pid = getpid();
 
-  sprintf(filename, "%s/gotoblas.%d", HUGETLB_FILE_NAME, hugetlb_pid);
+  sPRINTF(filename, "%s/gotoblas.%d", HUGETLB_FILE_NAME, hugetlb_pid);
 
   if ((fd = open(filename, O_RDWR | O_CREAT, 0700)) < 0) {
     return (void *)-1;
@@ -1211,7 +1212,7 @@ UNLOCK_COMMAND(&alloc_lock);
   }
 
 #ifdef DEBUG
-  printf("Alloc Start ...\n");
+  PRINTF("Alloc Start ...\n");
 #endif
 
   position = 0;
@@ -1227,14 +1228,14 @@ UNLOCK_COMMAND(&alloc_lock);
   allocation :
 
 #ifdef DEBUG
-  printf("  Position -> %d\n", position);
+  PRINTF("  Position -> %d\n", position);
 #endif
 
   alloc_info = alloc_table[position];
   if (!alloc_info) {
     do {
 #ifdef DEBUG
-      printf("Allocation Start : %lx\n", base_address);
+      PRINTF("Allocation Start : %lx\n", base_address);
 #endif
 
       map_address = (void *)-1;
@@ -1247,14 +1248,14 @@ UNLOCK_COMMAND(&alloc_lock);
 
 #ifdef ALLOC_DEVICEDRIVER
         if ((*func ==  alloc_devicedirver) && (map_address == (void *)-1)) {
-            fprintf(stderr, "OpenBLAS Warning ... Physically contiguous allocation failed.\n");
+            FPRINTF(stderr, "OpenBLAS Warning ... Physically contiguous allocation failed.\n");
         }
 #endif
 
 #ifdef ALLOC_HUGETLBFILE
         if ((*func == alloc_hugetlbfile) && (map_address == (void *)-1)) {
 #ifndef OS_WINDOWS
-            fprintf(stderr, "OpenBLAS Warning ... HugeTLB(File) allocation failed.\n");
+            FPRINTF(stderr, "OpenBLAS Warning ... HugeTLB(File) allocation failed.\n");
 #endif
         }
 #endif
@@ -1267,7 +1268,7 @@ UNLOCK_COMMAND(&alloc_lock);
       }
 
 #ifdef DEBUG
-      printf("  Success -> %08lx\n", map_address);
+      PRINTF("  Success -> %08lx\n", map_address);
 #endif
       if (((BLASLONG) map_address) == -1) base_address = 0UL;
 
@@ -1278,12 +1279,12 @@ UNLOCK_COMMAND(&alloc_lock);
     alloc_table[position] = alloc_info = map_address;
 
 #ifdef DEBUG
-    printf("  Mapping Succeeded. %p(%d)\n", (void *)alloc_info, position);
+    PRINTF("  Mapping Succeeded. %p(%d)\n", (void *)alloc_info, position);
 #endif
   }
 
 #ifdef DEBUG
-  printf("Mapped   : %p  %3d\n\n", (void *)alloc_info, position);
+  PRINTF("Mapped   : %p  %3d\n\n", (void *)alloc_info, position);
 #endif
 
   alloc_info->used = 1;
@@ -1291,7 +1292,7 @@ UNLOCK_COMMAND(&alloc_lock);
   return (void *)(((char *)alloc_info) + sizeof(struct alloc_t));
 
  error:
-  printf("OpenBLAS : Program will terminate because you tried to allocate too many memory regions.\n");
+  PRINTF("OpenBLAS : Program will terminate because you tried to allocate too many memory regions.\n");
 
   return NULL;
 }
@@ -1305,13 +1306,13 @@ void blas_memory_free(void *buffer){
   struct alloc_t *alloc_info = (void *)(((char *)buffer) - sizeof(struct alloc_t));
 
 #ifdef DEBUG
-  printf("Unmapped Start : %p ...\n", alloc_info);
+  PRINTF("Unmapped Start : %p ...\n", alloc_info);
 #endif
 
   alloc_info->used = 0;
 
 #ifdef DEBUG
-  printf("Unmap Succeeded.\n\n");
+  PRINTF("Unmap Succeeded.\n\n");
 #endif
 
   return;
@@ -1320,7 +1321,7 @@ void blas_memory_free(void *buffer){
   alloc_table = get_memory_table();
   for (position = 0; position < NUM_BUFFERS; position++){
     if (alloc_table[position]) {
-      printf("%4ld  %p : %d\n", position, alloc_table[position], alloc_table[position]->used);
+      PRINTF("%4ld  %p : %d\n", position, alloc_table[position], alloc_table[position]->used);
     }
   }
 #endif
@@ -1669,7 +1670,8 @@ void gotoblas_dummy_for_PGI(void) {
 #define MEM_LARGE_PAGES  0x20000000
 #endif
 #else
-#define ALLOC_MMAP
+// Force malloc() since mmap() not available in Authorized LE mode.
+//#define ALLOC_MMAP
 #define ALLOC_MALLOC
 #endif
 
@@ -1704,8 +1706,8 @@ void gotoblas_dummy_for_PGI(void) {
 
 #if defined(OS_WINDOWS) && (defined(__MINGW32__) || defined(__MINGW64__))
 #include <conio.h>
-#undef  printf
-#define printf _cprintf
+#undef  PRINTF
+#define PRINTF _cPRINTF
 #endif
 
 #ifdef OS_LINUX
@@ -1923,7 +1925,7 @@ void set_stack_limit(int limitMB){
       rl.rlim_cur=StackSize;
       result=setrlimit(RLIMIT_STACK, &rl);
       if(result !=0){
-        fprintf(stderr, "OpenBLAS: set stack limit error =%d\n", result);
+        FPRINTF(stderr, "OpenBLAS: set stack limit error =%d\n", result);
       }
     }
   }
@@ -2008,7 +2010,7 @@ int blas_get_cpu_number(void){
   if (blas_num_threads > MAX_CPU_NUMBER) blas_num_threads = MAX_CPU_NUMBER;
 
 #ifdef DEBUG
-  printf( "Adjusted number of threads : %3d\n", blas_num_threads);
+  PRINTF( "Adjusted number of threads : %3d\n", blas_num_threads);
 #endif
 
   blas_cpu_number = blas_num_threads;
@@ -2069,8 +2071,8 @@ if (!release->address) return;
 
   if (munmap(release -> address, BUFFER_SIZE)) {
       int errsv=errno;
-       perror("OpenBLAS : munmap failed:");
-       printf("error code=%d,\trelease->address=%p\n",errsv,release->address);
+       PERROR("OpenBLAS : munmap failed:");
+       PRINTF("error code=%d,\trelease->address=%p\n",errsv,release->address);
   }
 }
 
@@ -2104,8 +2106,8 @@ static void *alloc_mmap(void *address){
   } else {
 #ifdef DEBUG
         int errsv=errno;
-       perror("OpenBLAS : mmap failed:");
-       printf("error code=%d,\tmap_address=%lx\n",errsv,map_address);
+       PERROR("OpenBLAS : mmap failed:");
+       PRINTF("error code=%d,\tmap_address=%lx\n",errsv,map_address);
 #endif
   }
 
@@ -2192,8 +2194,8 @@ static void *alloc_mmap(void *address){
         ret=my_mbind(map_address, BUFFER_SIZE * SCALING, MPOL_PREFERRED, NULL, 0, 0);
         if(ret==-1){
                 int errsv=errno;
-                perror("OpenBLAS alloc_mmap:");
-                printf("error code=%d,\tmap_address=%lx\n",errsv,map_address);
+                PERROR("OpenBLAS alloc_mmap:");
+                PRINTF("error code=%d,\tmap_address=%lx\n",errsv,map_address);
         }
 
 #else
@@ -2373,11 +2375,11 @@ static void *alloc_windows(void *address){
 static void alloc_devicedirver_free(struct release_t *release){
 
   if (munmap(release -> address, BUFFER_SIZE)) {
-    printf("OpenBLAS : Bugphysarea unmap failed.\n");
+    PRINTF("OpenBLAS : Bugphysarea unmap failed.\n");
   }
 
   if (close(release -> attr)) {
-    printf("OpenBLAS : Bugphysarea close failed.\n");
+    PRINTF("OpenBLAS : Bugphysarea close failed.\n");
   }
 
 }
@@ -2415,7 +2417,7 @@ static void *alloc_devicedirver(void *address){
 static void alloc_shm_free(struct release_t *release){
 
   if (shmdt(release -> address)) {
-    printf("OpenBLAS : Shared memory unmap failed.\n");
+    PRINTF("OpenBLAS : Shared memory unmap failed.\n");
     }
 }
 
@@ -2450,7 +2452,7 @@ static void alloc_hugetlb_free(struct release_t *release){
 
 #if defined(OS_LINUX) || defined(OS_AIX)
   if (shmdt(release -> address)) {
-    printf("OpenBLAS : Hugepage unmap failed.\n");
+    PRINTF("OpenBLAS : Hugepage unmap failed.\n");
   }
 #endif
 
@@ -2559,11 +2561,11 @@ static int hugetlb_pid = 0;
 static void alloc_hugetlbfile_free(struct release_t *release){
 
   if (munmap(release -> address, BUFFER_SIZE)) {
-    printf("OpenBLAS : HugeTLBfs unmap failed.\n");
+    PRINTF("OpenBLAS : HugeTLBfs unmap failed.\n");
   }
 
   if (close(release -> attr)) {
-    printf("OpenBLAS : HugeTLBfs close failed.\n");
+    PRINTF("OpenBLAS : HugeTLBfs close failed.\n");
   }
 }
 
@@ -2575,7 +2577,7 @@ static void *alloc_hugetlbfile(void *address){
 
   if (!hugetlb_pid) hugetlb_pid = getpid();
 
-  sprintf(filename, "%s/gotoblas.%d", HUGETLB_FILE_NAME, hugetlb_pid);
+  sPRINTF(filename, "%s/gotoblas.%d", HUGETLB_FILE_NAME, hugetlb_pid);
 
   if ((fd = open(filename, O_RDWR | O_CREAT, 0700)) < 0) {
     return (void *)-1;
@@ -2709,7 +2711,7 @@ void *blas_memory_alloc(int procpos){
 #endif
 
 #ifdef DEBUG
-  printf("Alloc Start ...\n");
+  PRINTF("Alloc Start ...\n");
 #endif
 
 /* #if defined(WHEREAMI) && !defined(USE_OPENMP)
@@ -2769,7 +2771,7 @@ void *blas_memory_alloc(int procpos){
   allocation :
 
 #ifdef DEBUG
-  printf("  Position -> %d\n", position);
+  PRINTF("  Position -> %d\n", position);
 #endif
 
   memory[position].used = 1;
@@ -2781,7 +2783,7 @@ void *blas_memory_alloc(int procpos){
   if (!memory[position].addr) {
     do {
 #ifdef DEBUG
-      printf("Allocation Start : %lx\n", base_address);
+      PRINTF("Allocation Start : %lx\n", base_address);
 #endif
 
       map_address = (void *)-1;
@@ -2794,14 +2796,14 @@ void *blas_memory_alloc(int procpos){
 
 #ifdef ALLOC_DEVICEDRIVER
         if ((*func ==  alloc_devicedirver) && (map_address == (void *)-1)) {
-            fprintf(stderr, "OpenBLAS Warning ... Physically contiguous allocation was failed.\n");
+            FPRINTF(stderr, "OpenBLAS Warning ... Physically contiguous allocation was failed.\n");
         }
 #endif
 
 #ifdef ALLOC_HUGETLBFILE
         if ((*func == alloc_hugetlbfile) && (map_address == (void *)-1)) {
 #ifndef OS_WINDOWS
-            fprintf(stderr, "OpenBLAS Warning ... HugeTLB(File) allocation was failed.\n");
+            FPRINTF(stderr, "OpenBLAS Warning ... HugeTLB(File) allocation was failed.\n");
 #endif
         }
 #endif
@@ -2814,7 +2816,7 @@ void *blas_memory_alloc(int procpos){
       }
 
 #ifdef DEBUG
-      printf("  Success -> %08lx\n", map_address);
+      PRINTF("  Success -> %08lx\n", map_address);
 #endif
       if (((BLASLONG) map_address) == -1) base_address = 0UL;
 
@@ -2831,7 +2833,7 @@ void *blas_memory_alloc(int procpos){
 #endif
 
 #ifdef DEBUG
-    printf("  Mapping Succeeded. %p(%d)\n", (void *)memory[position].addr, position);
+    PRINTF("  Mapping Succeeded. %p(%d)\n", (void *)memory[position].addr, position);
 #endif
   }
 
@@ -2861,14 +2863,14 @@ void *blas_memory_alloc(int procpos){
 
 
 #ifdef DEBUG
-  printf("Mapped   : %p  %3d\n\n",
+  PRINTF("Mapped   : %p  %3d\n\n",
           (void *)memory[position].addr, position);
 #endif
 
   return (void *)memory[position].addr;
 
  error:
-  printf("BLAS : Program is Terminated. Because you tried to allocate too many memory regions.\n");
+  PRINTF("BLAS : Program is Terminated. Because you tried to allocate too many memory regions.\n");
 
   return NULL;
 }
@@ -2878,7 +2880,7 @@ void blas_memory_free(void *free_area){
   int position;
 
 #ifdef DEBUG
-  printf("Unmapped Start : %p ...\n", free_area);
+  PRINTF("Unmapped Start : %p ...\n", free_area);
 #endif
 
   position = 0;
@@ -2892,7 +2894,7 @@ void blas_memory_free(void *free_area){
 
 #ifdef DEBUG
   if (memory[position].addr != free_area) goto error;
-  printf("  Position : %d\n", position);
+  PRINTF("  Position : %d\n", position);
 #endif
 
   // arm: ensure all writes are finished before other thread takes this memory
@@ -2904,17 +2906,17 @@ void blas_memory_free(void *free_area){
 #endif
 
 #ifdef DEBUG
-  printf("Unmap Succeeded.\n\n");
+  PRINTF("Unmap Succeeded.\n\n");
 #endif
 
   return;
 
  error:
-  printf("BLAS : Bad memory unallocation! : %4d  %p\n", position,  free_area);
+  PRINTF("BLAS : Bad memory unallocation! : %4d  %p\n", position,  free_area);
 
 #ifdef DEBUG
   for (position = 0; position < NUM_BUFFERS; position++)
-    printf("%4ld  %p : %d\n", position, memory[position].addr, memory[position].used);
+    PRINTF("%4ld  %p : %d\n", position, memory[position].addr, memory[position].used);
 #endif
 #if (defined(SMP) || defined(USE_LOCKING)) && !defined(USE_OPENMP)
   UNLOCK_COMMAND(&alloc_lock);

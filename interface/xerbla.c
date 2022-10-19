@@ -13,8 +13,8 @@ void CNAME(blasint p, char *rout, char *form, ...)
    va_start(args, form);
 
    if (p)
-      fprintf(stderr, "Parameter %d to routine %s was incorrect\n", p, rout);
-   vfprintf(stderr, form, args);
+      FPRINTF(stderr, "Parameter %d to routine %s was incorrect\n", p, rout);
+   VFPRINTF(stderr, form, args);
    va_end(args);
    exit(-1);
 }

@@ -23,6 +23,7 @@ COMMONOBJS	+=  dynamic_power.$(SUFFIX)
 else
 ifeq ($(ARCH),zarch)
 COMMONOBJS += dynamic_zarch.$(SUFFIX)
+COMMONOBJS += authorized_zarch.$(SUFFIX)
 else
 ifeq ($(ARCH),mips64)
 COMMONOBJS += dynamic_mips64.$(SUFFIX)
@@ -94,7 +95,7 @@ ifeq ($(ARCH),power)
 HPLOBJS = memory.$(SUFFIX) xerbla.$(SUFFIX) dynamic_power.$(SUFFIX)
 else
 ifeq ($(ARCH),zarch)
-HPLOBJS = memory.$(SUFFIX) xerbla.$(SUFFIX) dynamic_zarch.$(SUFFIX)
+HPLOBJS = memory.$(SUFFIX) xerbla.$(SUFFIX) dynamic_zarch.$(SUFFIX) authorized_zarch.$(SUFFIX)
 else
 ifeq ($(ARCH),mips64)
 HPLOBJS = memory.$(SUFFIX) xerbla.$(SUFFIX) dynamic_mips64.$(SUFFIX)

@@ -131,5 +131,38 @@ REALNAME:
 #define MAP_ANONYMOUS MAP_ANON
 #endif
 
+#ifdef ALLOW_AUTHORIZED_LE
+  // Declarations relating to alternatives for functions not provided in 
+  // z/OS Authorized LE environment.
+
+  // Function pointer types
+  typedef int (*__openblas_printf_ptr_t)(const char *, ...);
+  typedef int (*__openblas_fprintf_ptr_t)(FILE *, const char *, ...);
+  typedef int (*__openblas_vfprintf_ptr_t)(FILE *, const char *, ...);
+  typedef void (*__openblas_perror_ptr_t)(const char *);
+
+  // Function pointers
+  #ifndef AUTHORIZED_ZARCH_C  // contains ptr definitions
+    extern __openblas_printf_ptr_t __openblas_printf_ptr;
+    extern __openblas_fprintf_ptr_t __openblas_fprintf_ptr;
+    extern __openblas_vfprintf_ptr_t __openblas_vfprintf_ptr;
+    extern __openblas_perror_ptr_t __openblas_perror_ptr;
+  #endif
 #endif
 
+// Macros for use in OpenBLAS functions 
+#ifdef ALLOW_AUTHORIZED_LE
+  // Function pointer version
+  #define PRINTF (*__openblas_printf_ptr)
+  #define FPRINTF (*__openblas_fprintf_ptr)
+  #define VFPRINTF (*__openblas_vfprintf_ptr)
+  #define PERROR (*__openblas_perror_ptr)
+#else
+  // Default version
+  #define PRINTF printf
+  #define FPRINTF fprintf
+  #define VFPRINTF vfprintf
+  #define PERROR  perror
+#endif
+
+#endif  // #ifndef COMMON_ZARCH

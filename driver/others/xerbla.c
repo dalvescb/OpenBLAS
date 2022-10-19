@@ -55,7 +55,7 @@
 #ifdef __ELF__
 int __xerbla(char *message, blasint *info, blasint length){
 
-  printf(MSGFMT,
+  PRINTF(MSGFMT,
 	  message, *info);
 
   return 0;
@@ -67,7 +67,7 @@ int BLASFUNC(xerbla)(char *, blasint *, blasint) __attribute__ ((weak, alias ("_
 
 int BLASFUNC(xerbla)(char *message, blasint *info, blasint length){
 
-  printf(MSGFMT,
+  PRINTF(MSGFMT,
 	  message, *info);
 
   return 0;
