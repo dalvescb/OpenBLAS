@@ -14,6 +14,10 @@ endif
 
 # COMMONOBJS	+=  info.$(SUFFIX)
 
+ifeq ($(OS), OS/390)
+COMMONOBJS += authorized_zarch.$(SUFFIX)
+endif
+
 ifeq ($(DYNAMIC_ARCH), 1)
 ifeq ($(ARCH),arm64)
 COMMONOBJS	+=  dynamic_arm64.$(SUFFIX)
@@ -23,7 +27,6 @@ COMMONOBJS	+=  dynamic_power.$(SUFFIX)
 else
 ifeq ($(ARCH),zarch)
 COMMONOBJS += dynamic_zarch.$(SUFFIX)
-COMMONOBJS += authorized_zarch.$(SUFFIX)
 else
 ifeq ($(ARCH),mips64)
 COMMONOBJS += dynamic_mips64.$(SUFFIX)
@@ -265,6 +268,9 @@ mulx.$(PSUFFIX) : $(ARCH)/mulx.c
 info.$(SUFFIX) : info.c info.h ../../common.h ../../param.h
 	$(CC) $(CFLAGS) -c $< -o $(@F)
 
+
+authorized_zarch.$(SUFFIX) : authorized_zarch.c ../../common.h
+	$(CC) $(CFLAGS) -c $< -o $(@F)
 
 hpl   : override CFLAGS += -DHPL
 hpl_p : override CFLAGS += -DHPL

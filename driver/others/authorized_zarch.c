@@ -1,7 +1,7 @@
 #define AUTHORIZED_ZARCH_C
 
 #ifdef ALLOW_AUTHORIZED_LE
-  #include "common_zarch.h"  // For typedefs
+  #include "common.h"  // For typedefs
 
   // Definitions of pointers to functions not provided in
   // z/OS Authorized LE environment.  They are initialized statically

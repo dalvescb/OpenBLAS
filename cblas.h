@@ -9,8 +9,8 @@ extern "C" {
 /* Assume C declarations for C++ */
 #endif /* __cplusplus */
 
-#ifdef ZARCH
-  #include "cblas_zarch.h"
+#ifdef zOS
+#include "cblas_zarch.h"
 #endif
 
 /*Set the number of threads on runtime.*/
