@@ -138,7 +138,7 @@ REALNAME:
   // Function pointer types
   typedef int (*__openblas_printf_ptr_t)(const char *, ...);
   typedef int (*__openblas_fprintf_ptr_t)(FILE *, const char *, ...);
-  typedef int (*__openblas_vfprintf_ptr_t)(FILE *, const char *, ...);
+  typedef int (*__openblas_vfprintf_ptr_t)(FILE *, const char *, char **);
   typedef void (*__openblas_perror_ptr_t)(const char *);
 
   // Function pointers

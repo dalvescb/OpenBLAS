@@ -2,10 +2,12 @@ set -x
 mkdir -p lib_static lib_dynamic	
 rm -f lib_static/libopenblas* lib_dynamic/libopenblas*
 
-# no longer exists
+# Used for Dec 2021 - no longer exists
 #CLANG=/nfsmnts/wozdrivers/continuous.dev/s390x/zOS/wozdev/1439/bin/clang
-
 # recreated by Abhina Sreeskantharajan here
+#CLANG=/nfsmnts/wozdrivers/continuous/openxlC/zOS/woz/1439/bin/clang
+
+# Released z/OS wyvern V1R1
 CLANG=/nfsmnts/bpidrivers/cnwv110/os390/J0000068/usr/lpp/IBM/cnw/v1r1/openxl/bin/ibm-clang64
 
 # Set up script for compiler
@@ -17,6 +19,8 @@ export STEPLIB="TSCTEST.CEEZ240.S2217.SCEERUN2:TSCTEST.CEEZ240.S2217.SCEERUN${ST
 
 MAKE="make CC=$CLANG ALLOW_AUTHORIZED_LE=1"
 
+if test 1 -eq 1
+then
 ############ dynamic library ############
 $MAKE clean
 $MAKE TARGET=Z14
@@ -30,9 +34,12 @@ ln -s libopenblas_z14-r0.3.13.dev_zOS_64xp.dll libopenblas.dll
 ln -s libopenblas_z14-r0.3.13.dev_zOS_64xp.x libopenblas.x
 cd ..
 ########################################
+fi
 
 #
 
+if test 1 -eq 1
+then
 ############ static library ############
 $MAKE clean
 $MAKE NO_SHARED=1 TARGET=Z14
@@ -44,4 +51,4 @@ cd lib_static
 ln -s libopenblas_z14-r0.3.13.dev_zOS_64xp.a libopenblas.a
 cd ..
 ########################################
-
+fi

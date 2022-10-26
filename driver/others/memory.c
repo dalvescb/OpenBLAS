@@ -1070,7 +1070,7 @@ static void *alloc_hugetlbfile(void *address){
 
   if (!hugetlb_pid) hugetlb_pid = getpid();
 
-  sPRINTF(filename, "%s/gotoblas.%d", HUGETLB_FILE_NAME, hugetlb_pid);
+  sprintf(filename, "%s/gotoblas.%d", HUGETLB_FILE_NAME, hugetlb_pid);
 
   if ((fd = open(filename, O_RDWR | O_CREAT, 0700)) < 0) {
     return (void *)-1;
@@ -2577,7 +2577,7 @@ static void *alloc_hugetlbfile(void *address){
 
   if (!hugetlb_pid) hugetlb_pid = getpid();
 
-  sPRINTF(filename, "%s/gotoblas.%d", HUGETLB_FILE_NAME, hugetlb_pid);
+  sprintf(filename, "%s/gotoblas.%d", HUGETLB_FILE_NAME, hugetlb_pid);
 
   if ((fd = open(filename, O_RDWR | O_CREAT, 0700)) < 0) {
     return (void *)-1;
