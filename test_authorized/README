@@ -1,0 +1,12 @@
+Tests for additional functionality to support z/OS authorized mode (where print
+functions are not allowed).
+
+run_func_ptrs - script to run test_func_ptrs.c.  Calls function pointers for
+print functions with default settings and then with non-default user-supplied
+print functions.  After running, also check file foo which contains fprintf
+and vfprintf output.
+
+run_error_print - script to run test_error_print.c.  Calls BLAS functions that
+print error messages with invalid arguments so as to trigger printing.  Calls
+each such function first with default print functions, and then with
+user-supplied ones.

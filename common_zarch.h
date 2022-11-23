@@ -131,7 +131,7 @@ REALNAME:
 #define MAP_ANONYMOUS MAP_ANON
 #endif
 
-#ifdef ALLOW_AUTHORIZED_LE
+#ifdef __OPENBLAS_AUTHORIZED_ZOS
   // Declarations relating to alternatives for functions not provided in 
   // z/OS Authorized LE environment.
 
@@ -151,7 +151,7 @@ REALNAME:
 #endif
 
 // Macros for use in OpenBLAS functions 
-#ifdef ALLOW_AUTHORIZED_LE
+#ifdef __OPENBLAS_AUTHORIZED_ZOS
   // Function pointer version
   #define PRINTF (*__openblas_printf_ptr)
   #define FPRINTF (*__openblas_fprintf_ptr)

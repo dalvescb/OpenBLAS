@@ -1,0 +1,10 @@
+CLANG=/nfsmnts/wozdrivers/continuous/openxlC/zOS/woz/1439/bin/clang
+
+# Set up script for compiler
+#/nfsmnts/wozdrivers/continuous/openxlC/zOS/woz/1439/bin/run  # has bug
+export STEPLIB="TSCTEST.WOZDEV.Z1439.SCEERUN2:TSCTEST.CEEZ240.WYVERN.LEFIX1.SCEERUN:TSCTEST.CEEZ240.WYVERN.LEFIX1.SCEERUN2:TSCTEST.CEEZ240.WYVERN.BETA2.SCEERUN:TSCTEST.CEEZ240.WYVERN.BETA2.SCEERUN2:TSCTEST.CEEZ240.S2111.SCEERUN:TSCTEST.CEEZ240.S2111.SCEERUN2${STEPLIB:+:${STEPLIB}}"
+export LIBPATH="/nfsmnts/wozdrivers/continuous/openxlC/zOS/woz/1439/lib${LIBPATH:+:${LIBPATH}}"
+
+rm -f a.out
+$CLANG -D_XOPEN_SOURCE_EXTENDED -m64 -DzOS -D__OPENBLAS_AUTHORIZED_ZOS -L../lib_static -lopenblas test_func_ptrs.c -I..
+a.out

@@ -1,0 +1,43 @@
+CLANG=/nfsmnts/wozdrivers/continuous/openxlC/zOS/woz/1439/bin/clang
+
+# Set up script for compiler
+#/nfsmnts/wozdrivers/continuous/openxlC/zOS/woz/1439/bin/run  # has bug
+export STEPLIB="TSCTEST.WOZDEV.Z1439.SCEERUN2:TSCTEST.CEEZ240.WYVERN.LEFIX1.SCEERUN:TSCTEST.CEEZ240.WYVERN.LEFIX1.SCEERUN2:TSCTEST.CEEZ240.WYVERN.BETA2.SCEERUN:TSCTEST.CEEZ240.WYVERN.BETA2.SCEERUN2:TSCTEST.CEEZ240.S2111.SCEERUN:TSCTEST.CEEZ240.S2111.SCEERUN2${STEPLIB:+:${STEPLIB}}"
+export LIBPATH="/nfsmnts/wozdrivers/continuous/openxlC/zOS/woz/1439/lib${LIBPATH:+:${LIBPATH}}"
+
+OPTS="-D_XOPEN_SOURCE_EXTENDED -m64 -DzOS -D__OPENBLAS_AUTHORIZED_ZOS -L../lib_static -lopenblas -I.."
+
+rm -f a.out
+$CLANG $OPTS -DDEFAULT -DTEST=1 test_error_print.c >/dev/null 2>&1
+a.out
+rm -f a.out
+$CLANG $OPTS -UDEFAULT -DTEST=1 test_error_print.c >/dev/null 2>&1
+a.out
+
+rm -f a.out
+$CLANG $OPTS -DDEFAULT -DTEST=2 test_error_print.c >/dev/null 2>&1
+a.out
+rm -f a.out
+$CLANG $OPTS -UDEFAULT -DTEST=2 test_error_print.c >/dev/null 2>&1
+a.out
+
+rm -f a.out
+$CLANG $OPTS -DDEFAULT -DTEST=3 test_error_print.c >/dev/null 2>&1
+a.out
+rm -f a.out
+$CLANG $OPTS -UDEFAULT -DTEST=3 test_error_print.c >/dev/null 2>&1
+a.out
+
+rm -f a.out
+$CLANG $OPTS -DDEFAULT -DTEST=4 test_error_print.c >/dev/null 2>&1
+a.out
+rm -f a.out
+$CLANG $OPTS -UDEFAULT -DTEST=4 test_error_print.c >/dev/null 2>&1
+a.out
+
+rm -f a.out
+$CLANG $OPTS -DDEFAULT -DTEST=5 test_error_print.c >/dev/null 2>&1
+a.out
+rm -f a.out
+$CLANG $OPTS -UDEFAULT -DTEST=5 test_error_print.c >/dev/null 2>&1
+a.out

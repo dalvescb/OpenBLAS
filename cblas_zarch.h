@@ -1,7 +1,7 @@
 #ifndef CBLAS_ZARCH
 #define CBLAS_ZARCH
 
-#ifdef ALLOW_AUTHORIZED_LE
+#ifdef __OPENBLAS_AUTHORIZED_ZOS
   // User-callable functions to override defaults with their own functions that
   // work in Authorized LE environment.
 

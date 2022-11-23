@@ -1,6 +1,6 @@
 #define AUTHORIZED_ZARCH_C
 
-#ifdef ALLOW_AUTHORIZED_LE
+#ifdef __OPENBLAS_AUTHORIZED_ZOS
   #include "common.h"  // For typedefs
 
   // Definitions of pointers to functions not provided in

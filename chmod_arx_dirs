@@ -1,0 +1,9 @@
+chmod -R a+r . 
+for f in `find .`
+do
+  if test -d $f
+  then
+    echo $f
+    chmod a+x $f
+  fi
+done

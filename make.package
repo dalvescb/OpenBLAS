@@ -22,7 +22,7 @@ SD_DSNAME=SCEELIB    # side deck dataset name
 SD_MEMBER=CRTDQOBL   # side deck member name
 
 # Include files to ship (omitted ones needed only for build)
-INC_FILES="cblas.h common_level3.h common_thread.h common.h common_macro.h common_x.h common_c.h common_param.h common_z.h common_d.h common_q.h common_zarch.h common_interface.h common_reference.h config.h common_lapack.h common_s.h param.h common_level1.h common_sb.h common_level2.h common_stackalloc.h"
+INC_FILES="cblas.h cblas_zarch.h common_level3.h common_thread.h common.h common_macro.h common_x.h common_c.h common_param.h common_z.h common_d.h common_q.h common_zarch.h common_interface.h common_reference.h config.h common_lapack.h common_s.h param.h common_level1.h common_sb.h common_level2.h common_stackalloc.h"
 
 # Function returns 0 if argument file is tagged ASCII, 1 if EBCDIC.
 is_ascii(){
@@ -78,6 +78,11 @@ rm libopenblas.x.sed
 # Untag everything
 chtag -Rr package
 
+# Chmod everything a+r and dirs a+x
+cd package
+chmod_arx_dirs
+cd ..
+
 # Create .pax archive
 cd package
-pax -x pax -wzvf ../zOS_OpenBLAS_Mar2022_package.pax.Z .
+pax -x pax -wzvf ../zOS_OpenBLAS_Oct2022_package.pax.Z .
